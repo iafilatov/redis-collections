@@ -210,22 +210,22 @@ class RedisCollection:
         :type data: anything serializable
         :rtype: string
         """
-        return str(self.pickler.dumps(data))
+        return self.pickler.dumps(data)
 
-    def _unpickle(self, string):
-        """Converts given string serialization back to corresponding data.
-        If :obj:`None` or empty string given, :obj:`None` is returned.
+    def _unpickle(self, value):
+        """Converts given serialization back to corresponding data.
+        If :obj:`None` or empty value given, :obj:`None` is returned.
 
-        :param string: String to be unserialized.
-        :type string: string
+        :param value: Bytes to be unserialized.
+        :type value: bytes
         :rtype: anything serializable
         """
-        if string is None:
+        if value is None:
             return None
-        if not isinstance(string, basestring):
-            msg = 'Only strings can be unpickled (%r given).' % string
+        if not isinstance(value, bytes):
+            msg = 'Only bytes can be unpickled (%r given).' % value
             raise TypeError(msg)
-        return self.pickler.loads(string)
+        return self.pickler.loads(value)
 
     @abstractmethod
     def _update(self, data, pipe=None):
